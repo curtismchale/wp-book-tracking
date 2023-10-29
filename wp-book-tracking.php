@@ -30,17 +30,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [x] register taxonomy (cat ) for fiction/non fiction
 - [x] register taxonomy (cat) for genre
 - [x] register taxonomy (tag) for Author
-- [ ] need a way to add markdown to the post as well that just works like standard markdown and has a copy button
+- [x] need a way to add markdown to the post as well that just works like standard markdown and has a copy button
 	- for me this would be for members so I need to add a filter on the content display
 - [ ] add way to link to posts that reference this book
 - [ ] basic text search
+- [ ] rating
 
 ** Next **
 
-- [ ] ISBN look up so that we can populate all the data that way
+- [ ] ISBN/Title look up so that we can populate all the data that way
 - [ ] block to include book in Gutenberg
-- [ ] rating
-	- provide an option of stars or thumbs up/down
+- [ ] provide an option of stars or thumbs up/down as a rating system
 - [ ] faceted searching
 - [ ] sorting based on genre, rating ...
 
