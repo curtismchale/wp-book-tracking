@@ -235,7 +235,7 @@ class Book_Tracking{
 	 * @access public
 	 */
 	public function includes(){
-
+		require_once( BOOK_TRACK_PLUGIN_DIR . 'metabox.php' );
 	}
 
 	/**
