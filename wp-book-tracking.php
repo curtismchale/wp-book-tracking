@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [ ] need a way to add markdown to the post as well that just works like standard markdown and has a copy button
 	- for me this would be for members so I need to add a filter on the content display
 - [ ] add way to link to posts that reference this book
+- [ ] basic text search
 
 ** Next **
 
@@ -40,7 +41,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [ ] block to include book in Gutenberg
 - [ ] rating
 	- provide an option of stars or thumbs up/down
-
+- [ ] faceted searching
+- [ ] sorting based on genre, rating ...
 
  **/
 
