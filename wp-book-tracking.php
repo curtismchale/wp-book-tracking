@@ -119,6 +119,7 @@ class Book_Tracking{
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
+			'show_in_rest'		=> true,
 			'rewrite'           => array( 'slug' => 'book-author' ),
 		);
 
@@ -145,6 +146,7 @@ class Book_Tracking{
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
+			'show_in_rest'		=> true,
 			'rewrite'           => array( 'slug' => 'book-style' ),
 		);
 
@@ -172,6 +174,7 @@ class Book_Tracking{
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
+			'show_in_rest'		=> true,
 			'rewrite'           => array( 'slug' => 'book-genre' ),
 		);
 
@@ -208,6 +211,7 @@ class Book_Tracking{
 				'menu_position'         => 5, // sets admin menu position
 				'menu_icon'             => 'dashicons-book-alt',
 				'hierarchical'          => false, // funcions like posts
+				'show_in_rest'			=> true,
 				'supports'              => array('title', 'editor', 'revisions', 'excerpt', 'thumbnail'),
 				'rewrite'               => array('slug' => 'book', 'with_front' => true,), // permalinks format
 				'can_export'            => true,

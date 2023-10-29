@@ -47,12 +47,13 @@ class WPBT_Metabox {
 
 		$wpbt_md_notes = get_post_meta( absint( $post->ID ), '_wpbt_md_notes', true );
 	?>
-			<label for="wpbt_md_notes" />
-			<textarea name="wpbt_md_notes" type="textarea" id="wpbt_md_notes"><?php
-				if ( isset( $wpbt_md_notes ) && ! empty( $wpbt_md_notes ) ){
-					echo $wpbt_md_notes; // @todo this is insecure fix it
-				}
-			?></textarea>
+
+		<p id="wpbt_md_notes">
+			<label for="wpbt_md_notes"><?php _e( 'Custom message:', 'wecr' ); ?></label>
+			<?php wp_editor( wp_kses_post( $wpbt_md_notes ), 'wpbt_md_notes' ); ?>
+			<span class="description"><?php _e( "This is where your markdown notes go", 'wecr' ); ?>.</span>
+		</p>
+
 	<?php
 	}
 
@@ -91,7 +92,7 @@ echo '</pre>';
 */
 
 		if ( isset( $_POST['wpbt_md_notes'] ) ){
-			update_post_meta( absint( $post_id ), '_wpbt_md_notes', sanitize_text_field( $_POST['wpbt_md_notes'] ) );
+			update_post_meta( absint( $post_id ), '_wpbt_md_notes', wp_kses_post( $_POST['wpbt_md_notes'] ) );
 		}
 
 	}
