@@ -110,6 +110,16 @@ class Book_Tracking{
 	 */
 	public static function book_notes( $content ){
 
+		// return early if we are not on a book CPT
+		if ( 'wp-book' !== get_post_type( get_the_ID() ) ){
+			return $content;
+		}
+
+		// return early if the user doesn't have access to book content
+		if ( ! self::can_access_content( get_the_ID() ) ){
+			return self::member_message( $content );
+		} // is_user_member
+
 		$book_notes = get_post_meta( get_the_ID(), '_wpbt_md_notes', true );
 
 		$html = '';
@@ -125,6 +135,49 @@ class Book_Tracking{
 		return $content;
 
 	} // book_notes
+
+	/**
+	 * Decides if a user can access the content
+	 *
+	 * @since 0.1
+	 * @access private
+	 * @author Curtis McHale
+	 *
+	 * @param		int			$post_id		optional		The ID of the post we're checking
+	 * @return		bool		$access							True if the user can access the content
+	 */
+	private static function can_access_content( $post_id = null ){
+
+		$access = true;
+
+		/**
+		 * True if the user can access the content
+		 *
+		 * @param	int		$post_id			The post we're seeing if the user has access to
+		 */
+		return apply_filters( 'wpbt_can_access_content', (bool) $access, absint( $post_id ) );
+
+	} // is_user_member
+
+	/**
+	 * Adds a custom member message to the content if you don't have access
+	 *
+	 * @since 0.1
+	 * @access private
+	 * @author Curtis McHale
+	 *
+	 * @param		string			$content			required				Content of the post
+	 * @return		string			$content.$message							content with member message added
+	 */
+	private static function member_message( $content ){
+
+		$message = "If you'd like access to this member only content then <a href=\"https://curtismchale.ca/membership\">become a member</a>";
+
+		$message = apply_filters( 'wpbt_member_message', $message, get_the_ID() );
+
+		return $content . $message;
+
+	}
 
 
 	/**
