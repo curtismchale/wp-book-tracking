@@ -171,7 +171,7 @@ class Book_Tracking{
 	 */
 	private static function member_message( $content ){
 
-		$message = "If you'd like access to this member only content then <a href=\"https://curtismchale.ca/membership\">become a member</a>";
+		$message = "<p>If you'd like access to this member only content then <a href=\"https://curtismchale.ca/membership\">become a member</a></p>";
 
 		$message = apply_filters( 'wpbt_member_message', $message, get_the_ID() );
 
