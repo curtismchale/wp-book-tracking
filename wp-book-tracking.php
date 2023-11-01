@@ -39,6 +39,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [ ] book_notes line 131
 	- the indents are not being kept for the content
 
+** 8.2 issues
+
+- [ ] learndash breaks taxonomies somehow
+	- they don't expand at all so i can't enter anything and I already updated
+
 ** Next **
 
 - [ ] ISBN/Title look up so that we can populate all the data that way
