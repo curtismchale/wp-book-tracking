@@ -35,7 +35,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [ ] add way to link to posts that reference this book
 - [ ] basic text search
 - [ ] rating
-- [ ] restrict access to my notes
+- [x] restrict access to my notes
+- [ ] book_notes line 131
+	- the indents are not being kept for the content
 
 ** Next **
 
@@ -86,7 +88,7 @@ class Book_Tracking{
 		add_action( 'init', array( $this, 'add_cpt' ) );
 		add_action( 'init', array( $this, 'add_tax' ) );
 
-		add_filter( 'the_content', array( $this, 'book_notes' ) );
+		add_filter( 'the_content', array( __CLASS__, 'book_notes' ) );
 
 		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
@@ -104,29 +106,30 @@ class Book_Tracking{
 	 *
 	 * @param	$content					Content of the main post area
 	 * @uses	get_post_meta()				Returns post meta given post_id and key
-	 * @uses	get_the_ID()				Returns the post_id
+	 * @uses	get_queried_object_id()				Returns the post_id
 	 * @uses	wpautop()					Regex to make double line breaks paragraphs
 	 * @return	string		$content		old content with appended content
 	 */
 	public static function book_notes( $content ){
 
 		// return early if we are not on a book CPT
-		if ( 'wp-book' !== get_post_type( get_the_ID() ) ){
+		if ( 'wp-book' !== get_post_type( get_queried_object_id() ) ){
 			return $content;
 		}
 
 		// return early if the user doesn't have access to book content
-		if ( ! self::can_access_content( get_the_ID() ) ){
+		if ( ! self::can_access_content( get_queried_object_id() ) ){
 			return self::member_message( $content );
 		} // is_user_member
 
-		$book_notes = get_post_meta( get_the_ID(), '_wpbt_md_notes', true );
+		remove_filter( 'the_content', array( __CLASS__, 'book_notes' ), 10 );
+		$book_notes = get_post_meta( get_queried_object_id(), '_wpbt_md_notes', true );
 
 		$html = '';
 
 		$html .= '<section class="book-notes">';
 			$html .= '<code>';
-				$html .= wpautop( $book_notes );
+				$html .= wpautop( wp_kses_post( $book_notes ) );
 			$html .= '</code>';
 		$html .= '</section>';
 
@@ -173,7 +176,7 @@ class Book_Tracking{
 
 		$message = "<p>If you'd like access to this member only content then <a href=\"https://curtismchale.ca/membership\">become a member</a></p>";
 
-		$message = apply_filters( 'wpbt_member_message', $message, get_the_ID() );
+		$message = apply_filters( 'wpbt_member_message', $message, get_queried_object_id() );
 
 		return $content . $message;
 
@@ -185,7 +188,34 @@ class Book_Tracking{
 	 */
 	public function add_tax(){
 
-// Add new taxonomy, make it hierarchical (like categories)
+		// Add new taxonomy, make it hierarchical (like categories)
+		$labels = array(
+			'name'              => _x( 'Ratings', 'taxonomy general name', 'textdomain' ),
+			'singular_name'     => _x( 'Rating', 'taxonomy singular name', 'textdomain' ),
+			'search_items'      => __( 'Search Ratings', 'textdomain' ),
+			'all_items'         => __( 'All Ratings', 'textdomain' ),
+			'parent_item'       => __( 'Parent Rating', 'textdomain' ),
+			'parent_item_colon' => __( 'Parent Rating:', 'textdomain' ),
+			'edit_item'         => __( 'Edit Rating', 'textdomain' ),
+			'update_item'       => __( 'Update Rating', 'textdomain' ),
+			'add_new_item'      => __( 'Add New Rating', 'textdomain' ),
+			'new_item_name'     => __( 'New Rating Name', 'textdomain' ),
+			'menu_name'         => __( 'Rating', 'textdomain' ),
+		);
+
+		$args = array(
+			'hierarchical'      => true, // true == like cats
+			'labels'            => $labels,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'show_in_rest'		=> true,
+			'rewrite'           => array( 'slug' => 'book-rating' ),
+		);
+
+		register_taxonomy( 'book-rating', array( 'wp-book' ), $args );
+
+		// authors tax
 		$labels = array(
 			'name'              => _x( 'Authors', 'taxonomy general name', 'textdomain' ),
 			'singular_name'     => _x( 'Author', 'taxonomy singular name', 'textdomain' ),
@@ -201,7 +231,7 @@ class Book_Tracking{
 		);
 
 		$args = array(
-			'hierarchical'      => false,
+			'hierarchical'      => false, // like tags
 			'labels'            => $labels,
 			'show_ui'           => true,
 			'show_admin_column' => true,
