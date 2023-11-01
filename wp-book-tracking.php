@@ -35,6 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [ ] add way to link to posts that reference this book
 - [ ] basic text search
 - [ ] rating
+- [ ] restrict access to my notes
 
 ** Next **
 
@@ -85,12 +86,45 @@ class Book_Tracking{
 		add_action( 'init', array( $this, 'add_cpt' ) );
 		add_action( 'init', array( $this, 'add_tax' ) );
 
+		add_filter( 'the_content', array( $this, 'book_notes' ) );
+
 		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
 
 	} // init
+
+	/**
+	 * Appending the book notes to the_content
+	 *
+	 * @since 0.1
+	 * @access public
+	 * @author Curtis McHale
+	 *
+	 * @param	$content					Content of the main post area
+	 * @uses	get_post_meta()				Returns post meta given post_id and key
+	 * @uses	get_the_ID()				Returns the post_id
+	 * @uses	wpautop()					Regex to make double line breaks paragraphs
+	 * @return	string		$content		old content with appended content
+	 */
+	public static function book_notes( $content ){
+
+		$book_notes = get_post_meta( get_the_ID(), '_wpbt_md_notes', true );
+
+		$html = '';
+
+		$html .= '<section class="book-notes">';
+			$html .= '<code>';
+				$html .= wpautop( $book_notes );
+			$html .= '</code>';
+		$html .= '</section>';
+
+		$content = $content . $html;
+
+		return $content;
+
+	} // book_notes
 
 
 	/**
