@@ -156,6 +156,7 @@ class Book_Tracking{
 		$html = '';
 
 		$html .= '<section class="book-notes">';
+			$html .= self::get_copy_button_html();
 			$html .= '<code>';
 				$html .= wpautop( wp_kses_post( $book_notes ) );
 			$html .= '</code>';
@@ -166,6 +167,20 @@ class Book_Tracking{
 		return $content;
 
 	} // book_notes
+
+	private static function get_copy_button_html(){
+
+		$copy_button_html = '';
+
+		$copy_button_html .= '<div class="wp-block-buttons">';
+			$copy_button_html .= '<div class="wp-block-button">';
+				$copy_button_html .= '<button class="wpbt-copy-book-notes wp-block-button__link wp-element-button" onClick="wpbt_copy_text()">Copy Notes</button>';
+			$copy_button_html .= '</div>';
+		$copy_button_html .= '</div>';
+
+		return apply_filters( 'wpbt_copy_button_html', $copy_button_html );
+
+	}
 
 	/**
 	 * Decides if a user can access the content
