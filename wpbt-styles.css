@@ -1,0 +1,12 @@
+.book-notes{
+  color:black;
+  background-color: #E1E1DE;
+  padding:10px
+}
+
+.book-notes :not( .wp-block-code ) > code,
+.book-notes code{
+  background-color:transparent !important;
+  color:black !important; /* ugh I hate that but I can't get the first rule here to ovveride the stock rule */
+  padding:10px 0 !important;
+}

@@ -97,12 +97,33 @@ class Book_Tracking{
 
 		add_filter( 'the_content', array( __CLASS__, 'book_notes' ) );
 
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
+		add_action( 'admin_init', array( $this, 'enqueue' ) );
+
 		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
 
 	} // init
+
+	/**
+	* Registers and enqueues scripts and styles
+	*
+	* @uses    wp_enqueue_style
+	* @uses    wp_enqueue_script
+	*
+	* @since   0.1
+	* @author  SFNdesign, Curtis McHale
+	*/
+	public function enqueue(){
+
+		$plugin_data = get_plugin_data( __FILE__ );
+
+		// styles plugin
+		wp_enqueue_style( 'wpbt-styles', plugins_url( '/wp-book-tracking/wpbt-styles.css' ), '', esc_attr( $plugin_data['Version'] ), 'all');
+
+	}
 
 	/**
 	 * Appending the book notes to the_content
