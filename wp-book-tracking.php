@@ -35,6 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [ ] add way to link to posts that reference this book
 - [ ] basic text search
 - [ ] rating
+- [ ] add the block editer with the `show-in_rest` flag
+	- something about this was breaking with Learndash on originally and the taxonomies wouldn't show up
 - [x] restrict access to my notes
 - [ ] book_notes line 131
 	- the indents are not being kept for the content
@@ -214,7 +216,7 @@ class Book_Tracking{
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'show_in_rest'		=> true,
+			'show_in_rest'		=> false,
 			'rewrite'           => array( 'slug' => 'book-rating' ),
 		);
 
@@ -241,7 +243,7 @@ class Book_Tracking{
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'show_in_rest'		=> true,
+			'show_in_rest'		=> false,
 			'rewrite'           => array( 'slug' => 'book-author' ),
 		);
 
@@ -268,7 +270,7 @@ class Book_Tracking{
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'show_in_rest'		=> true,
+			'show_in_rest'		=> false,
 			'rewrite'           => array( 'slug' => 'book-style' ),
 		);
 
@@ -296,7 +298,7 @@ class Book_Tracking{
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'query_var'         => true,
-			'show_in_rest'		=> true,
+			'show_in_rest'		=> false,
 			'rewrite'           => array( 'slug' => 'book-genre' ),
 		);
 
@@ -333,7 +335,7 @@ class Book_Tracking{
 				'menu_position'         => 5, // sets admin menu position
 				'menu_icon'             => 'dashicons-book-alt',
 				'hierarchical'          => false, // funcions like posts
-				'show_in_rest'			=> true,
+				'show_in_rest'			=> false,
 				'supports'              => array('title', 'editor', 'revisions', 'excerpt', 'thumbnail'),
 				'rewrite'               => array('slug' => 'book', 'with_front' => true,), // permalinks format
 				'can_export'            => true,
