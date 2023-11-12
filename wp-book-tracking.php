@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [x] restrict access to my notes
 - [ ] book_notes line 131
 	- the indents are not being kept for the content
+- [x] copy markdown button
 
 ** 8.2 issues
 
@@ -121,9 +122,15 @@ class Book_Tracking{
 		$plugin_data = get_plugin_data( __FILE__ );
 
 		// styles plugin
-		wp_enqueue_style( 'wpbt-styles', plugins_url( '/wp-book-tracking/wpbt-styles.css' ), '', esc_attr( $plugin_data['Version'] ), 'all');
+		if ( 'production' != wp_get_environment_type() ){
+			wp_enqueue_style( 'wpbt-styles', plugins_url( '/wp-book-tracking/wpbt-styles.css' ), '', time(), 'all');
+			wp_enqueue_script('wpbt-scripts', plugins_url( '/wp-book-tracking/wpbt-scripts.js' ), array('jquery'), time(), true);
+		} else {
+			wp_enqueue_style( 'wpbt-styles', plugins_url( '/wp-book-tracking/wpbt-styles.css' ), '', esc_attr( $plugin_data['Version'] ), 'all');
+			wp_enqueue_script('wpbt-scripts', plugins_url( '/wp-book-tracking/wpbt-scripts.js' ), array('jquery'), esc_attr( $plugin_data['Version'] ), true);
+		}
 
-	}
+	} // enqueue
 
 	/**
 	 * Appending the book notes to the_content
@@ -157,7 +164,7 @@ class Book_Tracking{
 
 		$html .= '<section class="book-notes">';
 			$html .= self::get_copy_button_html();
-			$html .= '<code>';
+			$html .= '<code id="book_notes_to_copy">';
 				$html .= wpautop( wp_kses_post( $book_notes ) );
 			$html .= '</code>';
 		$html .= '</section>';
@@ -174,7 +181,7 @@ class Book_Tracking{
 
 		$copy_button_html .= '<div class="wp-block-buttons">';
 			$copy_button_html .= '<div class="wp-block-button">';
-				$copy_button_html .= '<button class="wpbt-copy-book-notes wp-block-button__link wp-element-button" onClick="wpbt_copy_text()">Copy Notes</button>';
+				$copy_button_html .= '<button id="wpbt_copy_button" class="wpbt-copy-book-notes wp-block-button__link wp-element-button">Copy Notes</button>';
 			$copy_button_html .= '</div>';
 		$copy_button_html .= '</div>';
 
