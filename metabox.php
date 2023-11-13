@@ -179,7 +179,7 @@ echo '<pre>';
 print_r( $_POST );
 echo '</pre>';
 */
-error_log( print_r( $_POST, true ) );
+//error_log( print_r( $_POST, true ) );
 
 		if ( isset( $_POST['wpbt_read_start'] ) ){
 			update_post_meta( absint( $post_id ), '_wpbt_read_start', esc_attr( $_POST['wpbt_read_start'] ) );

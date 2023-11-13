@@ -36,6 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [x] rating
 - [x] restrict access to my notes
 - [x] copy markdown button
+- [x] date picker for read dates
 
 ** 8.2 issues
 
@@ -48,8 +49,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [ ] book_notes line 131
 	- the indents are not being kept for the content
 - [ ] basic text search
-- [ ] add the block editer with the `show-in_rest` flag
-	- something about this was breaking with Learndash on originally and the taxonomies wouldn't show up
 - [ ] ISBN/Title look up so that we can populate all the data that way
 - [ ] block to include book in Gutenberg
 - [ ] provide an option of stars or thumbs up/down as a rating system
