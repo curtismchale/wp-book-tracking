@@ -46,6 +46,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ** Next **
 
+- [ ] style the members message better
 - [ ] book_notes line 131
 	- the indents are not being kept for the content
 - [ ] basic text search
@@ -259,7 +260,7 @@ class Book_Tracking{
 	 */
 	private static function member_message( $content ){
 
-		$message = "<p>If you'd like access to this member only content then <a href=\"https://curtismchale.ca/membership\">become a member</a></p>";
+		$message = "<p class='wpbt-members-message'>If you'd like access to my raw book notes then <a href=\"https://curtismchale.ca/membership\">become a member</a></p>";
 
 		$message = apply_filters( 'wpbt_member_message', $message, get_queried_object_id() );
 
