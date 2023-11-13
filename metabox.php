@@ -29,13 +29,53 @@ class WPBT_Metabox {
 	public function add_metabox() {
 		add_meta_box(
 			'wpbt-metabox',
-			__( 'Mardown Notes', 'textdomain' ),
+			__( 'Markdown Notes', 'textdomain' ),
 			array( $this, 'render_metabox' ),
 			'wp-book',
 			'advanced',
 			'default'
 		);
 
+		add_meta_box(
+			'wpbt-metabox',
+			__( 'Related Books', 'textdomain' ),
+			array( $this, 'render_posts_metabox' ),
+			'post',
+			'advanced',
+			'default'
+		);
+
+	}
+
+	/**
+	 * Renders the meta box.
+	 */
+	public function render_posts_metabox( $post ) {
+		// Add nonce for security and authentication.
+		wp_nonce_field( 'wpbt_nonce_action', 'wpbt_nonce' );
+
+		$books_query = array(
+			'post_type' => 'wp-book',
+			'posts_per_page' => -1,
+			'fields' => 'ids',
+		);
+
+		$books = get_posts( $books_query );
+
+	?>
+
+		<p id="wpbt_related_books_select">
+			<label for="wpbt_related_books"><?php _e( 'Related Books', 'wpbt' ); ?></label>
+			<select name="wpbt_related_books" id="wpbt_related_book" multiple="multiple">
+				<option value="">Choose Books</option>
+				<?php foreach( $books as $book ){ ?>
+					<option value="<?php echo absint( $book ); ?>"><?php echo get_the_title( absint( $book ) ); ?></option>
+				<?php } ?>
+			</select><br />
+			<span class="description"><?php _e( "Which books are related", 'wpbt' ); ?>.</span>
+		</p>
+
+	<?php
 	}
 
 	/**

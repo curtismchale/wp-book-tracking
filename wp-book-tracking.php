@@ -33,13 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [x] need a way to add markdown to the post as well that just works like standard markdown and has a copy button
 	- for me this would be for members so I need to add a filter on the content display
 - [ ] add way to link to posts that reference this book
-- [ ] basic text search
-- [ ] rating
-- [ ] add the block editer with the `show-in_rest` flag
-	- something about this was breaking with Learndash on originally and the taxonomies wouldn't show up
+- [x] rating
 - [x] restrict access to my notes
-- [ ] book_notes line 131
-	- the indents are not being kept for the content
 - [x] copy markdown button
 
 ** 8.2 issues
@@ -49,6 +44,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ** Next **
 
+- [ ] book_notes line 131
+	- the indents are not being kept for the content
+- [ ] basic text search
+- [ ] add the block editer with the `show-in_rest` flag
+	- something about this was breaking with Learndash on originally and the taxonomies wouldn't show up
 - [ ] ISBN/Title look up so that we can populate all the data that way
 - [ ] block to include book in Gutenberg
 - [ ] provide an option of stars or thumbs up/down as a rating system
@@ -98,6 +98,7 @@ class Book_Tracking{
 
 		add_filter( 'the_content', array( __CLASS__, 'book_notes' ) );
 
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_action( 'admin_init', array( $this, 'enqueue' ) );
 
@@ -117,9 +118,43 @@ class Book_Tracking{
 	* @since   0.1
 	* @author  SFNdesign, Curtis McHale
 	*/
+	public function admin_enqueue(){
+
+		$plugin_data = get_plugin_data( __FILE__ );
+		$screen = get_current_screen();
+
+		if ( 'post' != $screen->post_type ) return;
+
+		// styles plugin
+		if ( 'production' != wp_get_environment_type() ){
+			wp_enqueue_script('wpbt-admin-scripts', plugins_url( '/wp-book-tracking/wpbt-admin-scripts.js' ), array('jquery'), time(), true);
+
+			wp_enqueue_script('wpbt-tom-select', plugins_url( '/wp-book-tracking/node_modules/tom-select/dist/js/tom-select.complete.min.js' ), array('jquery'), time(), true);
+			wp_enqueue_style( 'wpbt-tom-select-styles', plugins_url( '/wp-book-tracking/node_modules/tom-select/dist/css/tom-select.bootstrap4.min.css' ), '', time(), 'all');
+		} else {
+			wp_enqueue_script('wpbt-admin-scripts', plugins_url( '/wp-book-tracking/wpbt-admin-scripts.js' ), array('jquery'), esc_attr( $plugin_data['Version'] ), true);
+
+			wp_enqueue_script('wpbt-tom-select', plugins_url( '/wp-book-tracking/node_modules/tom-select/dist/js/tom-select.complete.min.js' ), array('jquery'), esc_attr( $plugin_data['Version'] ), true);
+			wp_enqueue_style( 'wpbt-tom-select-styles', plugins_url( '/wp-book-tracking/node_modules/tom-select/dist/css/tom-select.bootstrap4.min.css' ), '', esc_attr( $plugin_data['Version'] ), 'all');
+		}
+
+
+	} // admin_enqueue
+
+	/**
+	* Registers and enqueues scripts and styles
+	*
+	* @uses    wp_enqueue_style
+	* @uses    wp_enqueue_script
+	*
+	* @since   0.1
+	* @author  SFNdesign, Curtis McHale
+	*/
 	public function enqueue(){
 
 		$plugin_data = get_plugin_data( __FILE__ );
+
+		if ( is_admin() ) return;
 
 		// styles plugin
 		if ( 'production' != wp_get_environment_type() ){
