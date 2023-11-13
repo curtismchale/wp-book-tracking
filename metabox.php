@@ -37,6 +37,15 @@ class WPBT_Metabox {
 		);
 
 		add_meta_box(
+			'wpbt-metabox-date',
+			__( 'Date Read', 'textdomain' ),
+			array( $this, 'render_read_metabox' ),
+			'wp-book',
+			'side',
+			'default'
+		);
+
+		add_meta_box(
 			'wpbt-metabox',
 			__( 'Related Books', 'textdomain' ),
 			array( $this, 'render_posts_metabox' ),
@@ -85,6 +94,38 @@ class WPBT_Metabox {
 
 	<?php
 	}
+
+	/**
+	 * Renders the reading date metabox
+	 *
+	 * @since 0.1
+	 * @access public
+	 * @author Curtis McHale
+	 *
+	 * @param	object		$post		required				Post object for the page we're on
+	 */
+	public function render_read_metabox( $post ) {
+		// Add nonce for security and authentication.
+		wp_nonce_field( 'wpbt_nonce_action', 'wpbt_nonce' );
+
+		$wpbt_read_start = get_post_meta( absint( $post->ID ), '_wpbt_read_start', true );
+		$wpbt_read_finished = get_post_meta( absint( $post->ID ), '_wpbt_read_finished', true );
+	?>
+
+		<p id="wpbt_read_start">
+			<label for="wpbt_read_start"><?php _e( 'Started', 'wecr' ); ?></label>
+			<input name="wpbt_read_start" type="date" id="wpbt_read_start" value="<?php echo esc_attr( $wpbt_read_start ); ?>"><br />
+			<span class="description"><?php _e( "When did you start this book?", 'wecr' ); ?></span>
+		</p>
+
+		<p id="wpbt_read_finished">
+			<label for="wpbt_read_finished"><?php _e( 'Finished', 'wecr' ); ?></label>
+			<input name="wpbt_read_finished" type="date" id="wpbt_read_finished" value="<?php echo esc_attr( $wpbt_read_finished ); ?>"><br />
+			<span class="description"><?php _e( "When did you finish this book?", 'wecr' ); ?></span>
+		</p>
+
+	<?php
+	} // render_read_metabox
 
 	/**
 	 * Renders the meta box.
@@ -138,7 +179,15 @@ echo '<pre>';
 print_r( $_POST );
 echo '</pre>';
 */
-//error_log( print_r( $_POST, true ) );
+error_log( print_r( $_POST, true ) );
+
+		if ( isset( $_POST['wpbt_read_start'] ) ){
+			update_post_meta( absint( $post_id ), '_wpbt_read_start', esc_attr( $_POST['wpbt_read_start'] ) );
+		}
+
+		if ( isset( $_POST['wpbt_read_finished'] ) ){
+			update_post_meta( absint( $post_id ), '_wpbt_read_finished', esc_attr( $_POST['wpbt_read_finished'] ) );
+		}
 
 
 		if ( isset( $_POST['wpbt_related_books'] ) ){
