@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 - [x] register taxonomy (tag) for Author
 - [x] need a way to add markdown to the post as well that just works like standard markdown and has a copy button
 	- for me this would be for members so I need to add a filter on the content display
-- [ ] add way to link to posts that reference this book
+- [x] add way to link to posts that reference this book
 - [x] rating
 - [x] restrict access to my notes
 - [x] copy markdown button
@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 - [ ] learndash breaks taxonomies somehow
 	- they don't expand at all so i can't enter anything and I already updated
+	- with wp_debug false this does work so...
 
 ** Next **
 

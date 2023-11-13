@@ -61,15 +61,23 @@ class WPBT_Metabox {
 		);
 
 		$books = get_posts( $books_query );
+		$related_books = get_post_meta( absint( $post->ID ), '_wpbt_related_books', true );
 
 	?>
 
 		<p id="wpbt_related_books_select">
 			<label for="wpbt_related_books"><?php _e( 'Related Books', 'wpbt' ); ?></label>
-			<select name="wpbt_related_books" id="wpbt_related_book" multiple="multiple">
+			<select name="wpbt_related_books[]" id="wpbt_related_books" multiple="multiple">
 				<option value="">Choose Books</option>
 				<?php foreach( $books as $book ){ ?>
-					<option value="<?php echo absint( $book ); ?>"><?php echo get_the_title( absint( $book ) ); ?></option>
+					<?php
+						if( isset( $related_books ) && !empty( $related_books ) && in_array( absint( $book ), $related_books ) ){
+							$selected = 'selected="selected"';
+						} else {
+							$selected = '';
+						}
+					?>
+					<option value="<?php echo absint( $book ); ?>" <?php echo esc_html( $selected ); ?>><?php echo get_the_title( absint( $book ) ); ?></option>
 				<?php } ?>
 			</select><br />
 			<span class="description"><?php _e( "Which books are related", 'wpbt' ); ?>.</span>
@@ -130,6 +138,12 @@ echo '<pre>';
 print_r( $_POST );
 echo '</pre>';
 */
+//error_log( print_r( $_POST, true ) );
+
+
+		if ( isset( $_POST['wpbt_related_books'] ) ){
+			update_post_meta( absint( $post_id ), '_wpbt_related_books', array_map( 'absint', $_POST['wpbt_related_books'] ) );
+		}
 
 		if ( isset( $_POST['wpbt_md_notes'] ) ){
 			update_post_meta( absint( $post_id ), '_wpbt_md_notes', wp_kses_post( $_POST['wpbt_md_notes'] ) );
