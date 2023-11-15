@@ -25,6 +25,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 /**
+ *
+
+### BUG
+
+- [ ] clipboard button activates any time you click which is wrong
+- [ ] load the clipboard script only on single book page
 
 - [x] add CPT
 - [x] register taxonomy (cat ) for fiction/non fiction
@@ -160,10 +166,14 @@ class Book_Tracking{
 		// styles plugin
 		if ( 'production' != wp_get_environment_type() ){
 			wp_enqueue_style( 'wpbt-styles', plugins_url( '/wp-book-tracking/wpbt-styles.css' ), '', time(), 'all');
-			wp_enqueue_script('wpbt-scripts', plugins_url( '/wp-book-tracking/wpbt-scripts.js' ), array('jquery'), time(), true);
+			if ( is_user_logged_in() ) {
+				wp_enqueue_script('wpbt-scripts', plugins_url( '/wp-book-tracking/wpbt-scripts.js' ), array('jquery'), time(), true);
+			}
 		} else {
 			wp_enqueue_style( 'wpbt-styles', plugins_url( '/wp-book-tracking/wpbt-styles.css' ), '', esc_attr( $plugin_data['Version'] ), 'all');
-			wp_enqueue_script('wpbt-scripts', plugins_url( '/wp-book-tracking/wpbt-scripts.js' ), array('jquery'), esc_attr( $plugin_data['Version'] ), true);
+			if ( is_user_logged_in() ){
+				wp_enqueue_script('wpbt-scripts', plugins_url( '/wp-book-tracking/wpbt-scripts.js' ), array('jquery'), esc_attr( $plugin_data['Version'] ), true);
+			}
 		}
 
 	} // enqueue

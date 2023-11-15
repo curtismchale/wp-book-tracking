@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
   var book_notes = $('.book-notes');
 
 
-  $(document).on('click touchstart', copy_button, function(e){
+  $(document).on('click touchstart', "#wpbt_copy_button", function(e){
 
     // note .text() just grabs the text witohut the wrapping p tags
     var notes = $(book_notes).find( 'code' ).text();
