@@ -62,7 +62,7 @@ class WPBT_Metabox {
 	public function render_posts_metabox( $post ) {
 		// Add nonce for security and authentication.
 		wp_nonce_field( 'wpbt_nonce_action', 'wpbt_nonce' );
-
+// @todo add caching here
 		$books_query = array(
 			'post_type' => 'wp-book',
 			'posts_per_page' => -1,
@@ -192,13 +192,42 @@ echo '</pre>';
 
 		if ( isset( $_POST['wpbt_related_books'] ) ){
 			update_post_meta( absint( $post_id ), '_wpbt_related_books', array_map( 'absint', $_POST['wpbt_related_books'] ) );
+			self::update_book_meta( absint( $post_id ), $_POST['wpbt_related_books'] );
 		}
 
 		if ( isset( $_POST['wpbt_md_notes'] ) ){
 			update_post_meta( absint( $post_id ), '_wpbt_md_notes', wp_kses_post( $_POST['wpbt_md_notes'] ) );
 		}
 
-	}
+	} // save_metabox
+
+	/**
+	 * Adds the posts to books when I add a book to a post
+	 *
+	 * Instead of making a book look through each post when I'm looking for posts that are
+	 * related to the book it's much faster to just save the posts at the time I add a related
+	 * book to a post and then look up the posts by the post_id in an array later
+	 *
+	 * @since 0.2
+	 * @author Curtis
+	 * @access private
+	 */
+	private static function update_book_meta( $post_id, $book_ids ){
+
+		foreach ( $book_ids as $bid ){
+			// get existing meta field
+			$related_posts = get_post_meta( absint( $bid ), '_wpbt_related_books', true );
+			if ( empty( $related_posts ) ){
+				$related_posts = array();
+			}
+			// add on the current $post_id to the book
+			$related_posts[] = absint( $post_id );
+
+			update_post_meta( absint( $bid ), '_wpbt_related_books', $related_posts );
+		}
+
+	} // update_book_meta
+
 }
 
 new WPBT_Metabox();
